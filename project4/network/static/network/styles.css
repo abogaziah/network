@@ -1,6 +1,10 @@
-#new-post-form{
+#app{
     position:absolute;
     left:40%;
-    margin:0;
     width: 20%;
+}
+#postForm{
+    border-style: solid;
+    border-width: thin;
+    border-color: lightgray;
 }

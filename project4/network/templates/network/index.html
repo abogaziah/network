@@ -3,8 +3,10 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <div id = "app">
-            <script type="text/babel" src= "{% static 'components/components.js' %}"></script>
+        <div id = "app" >
+            <div id="postForm">
+                <script type="text/babel" src= "{% static 'components/components.js' %}"></script>
+            </div>
         </div>
     {% endif %}
 {% endblock %}
