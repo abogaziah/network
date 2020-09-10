@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const PostForm = document.querySelector('#new-post-form');
-    PostForm.addEventListener("submit", () => create_post(PostForm))
+    PostForm.addEventListener("submit", (event) => create_post(event, PostForm))
 })
 
-function create_post(PostForm){
+function create_post(event,PostForm){
     event.preventDefault()
     fetch('', {
         method: 'POST',

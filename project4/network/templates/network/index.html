@@ -1,13 +1,10 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     {% if user.is_authenticated %}
-            <form id="new-post-form">
-                <div class="form-group">
-                    <input autofocus class="form-control" type="text" name="content" placeholder="What's up?">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Post">
-            </form>
+        <div id = "app">
+            <script type="text/babel" src= "{% static 'components/components.js' %}"></script>
         </div>
     {% endif %}
 {% endblock %}
