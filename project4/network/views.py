@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import User, Post
 from django.views.decorators.csrf import csrf_exempt
 import json
+from datetime import datetime
 
 
 @csrf_exempt
@@ -78,3 +79,10 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def posts(request):
+    if request.method == "GET":
+        posts = Post.objects.all()
+        posts = posts.order_by("-time_stamp").all()
+        return JsonResponse([post.serialize() for post in posts], safe=False)
