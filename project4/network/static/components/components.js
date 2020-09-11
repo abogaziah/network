@@ -32,8 +32,8 @@ class PostForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <input class="form-control" type="text" placeholder="What's up?" value={this.state.value} onChange={this.handleChange} />
-                <input class="btn btn-primary" type="submit" value="Post" />
+                <input className="form-control" type="text" placeholder="What's up?" value={this.state.value} onChange={this.handleChange} />
+                <input className="btn btn-primary" type="submit" value="Post" />
             </form>
         );
     }
