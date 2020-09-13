@@ -1,7 +1,7 @@
 #app{
     position:absolute;
-    left:40%;
-    width: 20%;
+    left:30%;
+    width: 40%;
 }
 .postForm{
     border-style: solid;
@@ -17,7 +17,19 @@
 }
 .LikeButton{
     background-color: transparent;
-    color: darkred;
+    color: lightgray;
     border: none;
+    border-radius: 15px;
 
 }
+.LikeButton:hover{background-color:darkred}
+.LikeButton:focus {outline:0;}
+
+.UnlikeButton {
+    background-color: transparent;
+    color: darkred;
+    border: none;
+    border-radius: 15px;
+}
+.UnlikeButton:hover{background-color:lightgray}
+.UnlikeButton:focus {outline:0;}

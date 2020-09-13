@@ -29,7 +29,7 @@ def index(request):
                 })
         elif data["type"] == "like" or data["type"] == "unlike":
             post_id = data["id"]
-            post = Post.objects.filter(id=post_id)[0]
+            post = Post.objects.get(id=post_id)
             post.likes = post.likes+1 if data["type"] == "like" else post.likes-1
             post.save()
             message = "liked" if data["type"] == "like" else "unliked"
