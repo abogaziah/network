@@ -3,8 +3,21 @@
     left:40%;
     width: 20%;
 }
-#postForm{
+.postForm{
     border-style: solid;
     border-width: thin;
     border-color: lightgray;
+}
+.post{
+    border-style: solid;
+    border-width: thin;
+    border-color: lightgray;
+    margin: 20px 0px 20px 0px;
+    padding: 10px;
+}
+.LikeButton{
+    background-color: transparent;
+    color: darkred;
+    border: none;
+
 }

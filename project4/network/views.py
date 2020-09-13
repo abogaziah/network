@@ -17,14 +17,23 @@ def index(request):
         if data["type"] == "post":
             user = get_user(request)
             content = data["content"]
+            time_stamp = datetime.now()
+            post_id = str(user.username) + "-" + str(time_stamp.strftime("%m/%d/%Y, %H:%M:%S"))
             try:
-                post = Post(author=user, content=content)
+                post = Post(author=user, content=content, id=post_id, time_stamp=time_stamp)
                 post.save()
                 return JsonResponse({"message": "Posted"}, status=201)
             except IntegrityError:
                 return render(request, "network/index.html", {
                     "message": "invalid"
                 })
+        elif data["type"] == "like" or data["type"] == "unlike":
+            post_id = data["id"]
+            post = Post.objects.filter(id=post_id)[0]
+            post.likes = post.likes+1 if data["type"] == "like" else post.likes-1
+            post.save()
+            message = "liked" if data["type"] == "like" else "unliked"
+            return JsonResponse({"message": message}, status=201)
 
     return render(request, "network/index.html")
 
