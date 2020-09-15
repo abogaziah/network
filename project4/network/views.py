@@ -4,37 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.urls import reverse
-from .models import User, Post
+from .models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
-from datetime import datetime
 
 
-@csrf_exempt
 def index(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        if data["type"] == "post":
-            user = get_user(request)
-            content = data["content"]
-            time_stamp = datetime.now()
-            post_id = str(user.username) + "-" + str(time_stamp.strftime("%m/%d/%Y, %H:%M:%S"))
-            try:
-                post = Post(author=user, content=content, id=post_id, time_stamp=time_stamp)
-                post.save()
-                return JsonResponse({"message": "Posted"}, status=201)
-            except IntegrityError:
-                return render(request, "network/index.html", {
-                    "message": "invalid"
-                })
-        elif data["type"] == "like" or data["type"] == "unlike":
-            post_id = data["id"]
-            post = Post.objects.get(id=post_id)
-            post.likes = post.likes+1 if data["type"] == "like" else post.likes-1
-            post.save()
-            message = "liked" if data["type"] == "like" else "unliked"
-            return JsonResponse({"message": message}, status=201)
-
     return render(request, "network/index.html")
 
 
@@ -90,8 +65,51 @@ def register(request):
         return render(request, "network/register.html")
 
 
-def posts(request):
+def get_posts(request):
     if request.method == "GET":
         posts = Post.objects.all()
-        posts = posts.order_by("-time_stamp").all()
+        posts = posts.order_by("-created_at").all()
         return JsonResponse([post.serialize() for post in posts], safe=False)
+
+
+@csrf_exempt
+def submit_post(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user = get_user(request)
+        content = data["content"]
+        try:
+            post = Post(author=user, content=content)
+            post.save()
+            return JsonResponse({"message": "Posted"}, status=201)
+        except IntegrityError:
+            return render(request, "network/index.html", {
+                "message": "invalid"
+            })
+
+
+@csrf_exempt
+def submit_post_like(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        post_id = data["id"]
+        user = get_user(request)
+        post = Post.objects.get(id=post_id)
+        if data['type'] == 'like':
+            try:
+                like = PostLike(liker=user, post=post)
+                like.save()
+                return JsonResponse({"message": "liked"}, status=201)
+            except IntegrityError:
+                return render(request, "network/index.html", {
+                    "message": "invalid"
+                })
+        else:
+            try:
+                like = PostLike.objects.get(post=post)
+                like.delete()
+                return JsonResponse({"message": "unliked"}, status=201)
+            except IntegrityError:
+                return render(request, "network/index.html", {
+                    "message": "invalid"
+                })

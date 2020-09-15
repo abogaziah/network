@@ -34,13 +34,13 @@ class PostForm extends React.Component {
 
     create_post(){
         if (this.state.value.length> 0){
-            fetch('', {
+            fetch('/submitPost', {
                 method: 'POST',
                 body:JSON.stringify({
-                    type: 'post',
                     content: `${this.state.value}`
                 })
-            })
+            })//.then(response => response.json())
+                //.then(response => { console.log(response) });
             this.setState({value : ''})
         }
     }
@@ -66,7 +66,7 @@ class Feed extends React.Component{
     }
     fetchPosts(){
         event.preventDefault()
-        fetch('/posts',{
+        fetch('/getPosts',{
             method:'GET'
         }).then(response => response.json()).then(posts => {
             this.setState({posts:posts});
@@ -108,7 +108,7 @@ class Post extends React.Component{
                 <hr/>
                 <h5>{this.props.content}</h5>
                 <hr/>
-                <LikeButton id={this.props.id} likes={this.props.likes}/>
+                <LikeButton id={this.props.id} likes={0}/>
             </div>
 
         )
@@ -139,24 +139,26 @@ class LikeButton extends React.Component {
 
     fetchUnlike(){
         this.setState({likes:this.state.likes+1, class:'UnlikeButton'})
-        fetch('', {
+        fetch('/submitPostLike', {
             method: 'POST',
             body:JSON.stringify({
                 type: 'like',
                 id: `${this.props.id}`
             })
-        });
+        })//.then(response => response.json())
+        //.then(response => { console.log(response) });
     }
 
     fetchLike(){
         this.setState({likes:this.state.likes-1, class:'LikeButton'})
-        fetch('', {
+        fetch('/submitPostLike', {
             method: 'POST',
             body:JSON.stringify({
                 type: 'unlike',
                 id: `${this.props.id}`
             })
-        })
+        }).then(response => response.json())
+        .then(response => { console.log(response) });
     }
 
 
