@@ -115,13 +115,14 @@ class Feed extends React.Component{
 class ProfilePage extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {posts:[]};
+        const app = document.getElementById('app');
+        this.state = {posts:[], user: app.dataset.user};
         this.fetchPosts = this.fetchPosts.bind(this);
         this.fetchPosts()
     }
     fetchPosts(){
         event.preventDefault()
-        fetch('/getProfile/abogazia',{
+        fetch('/getProfile/'+this.state.user,{
             method:'GET'
         }).then(response => response.json()).then(posts => {
             this.setState({posts:posts});
