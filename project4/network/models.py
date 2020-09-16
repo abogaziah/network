@@ -18,7 +18,7 @@ class Post(models.Model):
             "content": self.content,
             "time_stamp": self.created_at,
             "id": self.id,
-            "likes": likes
+            "likes": likes,
         }
 
 
@@ -35,10 +35,16 @@ class Comment(models.Model):
 
 
 class PostLike(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
     liker = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["post", "liker"]
 
 
 class CommentLike(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     liker = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["comment", "liker"]

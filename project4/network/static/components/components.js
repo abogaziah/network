@@ -1,14 +1,33 @@
 class App extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {page:""};
+        this.determinePage()
+    }
+
+    determinePage(){
+        let homeButton = document.getElementById('homeButton');
+        homeButton.addEventListener('click', ()=>{
+            this.setState({page:"feed"});
+        })
+        let profileButton = document.getElementById("ProfileButton");
+        profileButton.addEventListener('click', ()=>{
+            this.setState({page:"profile"});
+        })
     }
 
     render(){
         return(
             <div>
                 <PostForm />
-                <Feed/>
+                {(this.state.page === "feed")
+                    ?<Feed/>
+                    :null
+                }
+                {(this.state.page === "profile")
+                    ?<ProfilePage/>
+                    :null
+                }
             </div>
         )
     }
@@ -61,8 +80,7 @@ class Feed extends React.Component{
         super(props);
         this.state = {posts:[]};
         this.fetchPosts = this.fetchPosts.bind(this);
-        let homeButton = document.querySelector("#homeButton");
-        homeButton.addEventListener('click', this.fetchPosts)
+        this.fetchPosts()
     }
     fetchPosts(){
         event.preventDefault()
@@ -94,6 +112,41 @@ class Feed extends React.Component{
 
 }
 
+class ProfilePage extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {posts:[]};
+        this.fetchPosts = this.fetchPosts.bind(this);
+        this.fetchPosts()
+    }
+    fetchPosts(){
+        event.preventDefault()
+        fetch('/getProfile/abogazia',{
+            method:'GET'
+        }).then(response => response.json()).then(posts => {
+            this.setState({posts:posts});
+        });
+    }
+    render() {
+        const posts = this.state.posts;
+        const ProfilePosts = posts.map((post) => {
+                let props = {
+                    username: post.author,
+                    timestamp: post.time_stamp,
+                    content: post.content,
+                    likes: post.likes,
+                    id: post.id
+                }
+                return <Post key={post.id} {...props}/>
+            }
+        );
+        return (
+            <div>
+                {ProfilePosts}
+            </div>)
+    }
+}
+
 class Post extends React.Component{
     constructor() {
         super();
@@ -108,7 +161,7 @@ class Post extends React.Component{
                 <hr/>
                 <h5>{this.props.content}</h5>
                 <hr/>
-                <LikeButton id={this.props.id} likes={0}/>
+                <LikeButton id={this.props.id} likes={this.props.likes}/>
             </div>
 
         )
@@ -145,8 +198,8 @@ class LikeButton extends React.Component {
                 type: 'like',
                 id: `${this.props.id}`
             })
-        })//.then(response => response.json())
-        //.then(response => { console.log(response) });
+        }).then(response => response.json())
+        .then(response => { console.log(response) });
     }
 
     fetchLike(){

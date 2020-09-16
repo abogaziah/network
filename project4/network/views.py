@@ -101,15 +101,19 @@ def submit_post_like(request):
                 like.save()
                 return JsonResponse({"message": "liked"}, status=201)
             except IntegrityError:
-                return render(request, "network/index.html", {
-                    "message": "invalid"
-                })
+                return JsonResponse({"message": "invalid"}, status=201)
         else:
             try:
                 like = PostLike.objects.get(post=post)
                 like.delete()
                 return JsonResponse({"message": "unliked"}, status=201)
             except IntegrityError:
-                return render(request, "network/index.html", {
-                    "message": "invalid"
-                })
+                return JsonResponse({"message": "invalid"}, status=201)
+
+@csrf_exempt
+def get_profile(request, username):
+    if request.method == "GET":
+        author = User.objects.get(username=username)
+        posts = Post.objects.filter(author=author)
+        posts = posts.order_by("-created_at").all()
+        return JsonResponse([post.serialize() for post in posts], safe=False)

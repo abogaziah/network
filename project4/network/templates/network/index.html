@@ -3,7 +3,7 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <div id = "app" >
+        <div id = "app" data-user = "{{ user.username }}">
             <script type="text/babel" src= "{% static 'components/components.js' %}"></script>
         </div>
     {% endif %}
