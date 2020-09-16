@@ -67,9 +67,16 @@ def register(request):
 
 def get_posts(request):
     if request.method == "GET":
+        response = []
+        user = get_user(request)
         posts = Post.objects.all()
         posts = posts.order_by("-created_at").all()
-        return JsonResponse([post.serialize() for post in posts], safe=False)
+        for post in posts:
+            liked = PostLike.objects.filter(liker=user, post=post).exists()
+            data_dict = post.serialize()
+            data_dict["liked"] = liked
+            response.append(data_dict)
+        return JsonResponse(response, safe=False)
 
 
 @csrf_exempt
@@ -104,7 +111,7 @@ def submit_post_like(request):
                 return JsonResponse({"message": "invalid"}, status=201)
         else:
             try:
-                like = PostLike.objects.get(post=post)
+                like = PostLike.objects.get(liker=user, post=post)
                 like.delete()
                 return JsonResponse({"message": "unliked"}, status=201)
             except IntegrityError:

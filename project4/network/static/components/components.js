@@ -98,7 +98,8 @@ class Feed extends React.Component{
                 timestamp: post.time_stamp,
                 content:post.content,
                 likes:post.likes,
-                id:post.id}
+                id:post.id,
+                liked: post.liked}
             return <Post key={post.id} {...props}/>
         }
         );
@@ -162,7 +163,7 @@ class Post extends React.Component{
                 <hr/>
                 <h5>{this.props.content}</h5>
                 <hr/>
-                <LikeButton id={this.props.id} likes={this.props.likes}/>
+                <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
             </div>
 
         )
@@ -173,9 +174,9 @@ class LikeButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            liked: false,
+            liked: this.props.liked,
             likes: this.props.likes,
-            class:'LikeButton'
+            class: (this.props.liked? 'UnlikeButton': 'LikeButton')
         };
         this.handleClick = this.handleClick.bind(this);
     }
