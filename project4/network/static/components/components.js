@@ -137,7 +137,8 @@ class ProfilePage extends React.Component{
                     timestamp: post.time_stamp,
                     content: post.content,
                     likes: post.likes,
-                    id: post.id
+                    id: post.id,
+                    liked: post.liked
                 }
                 return <Post key={post.id} {...props}/>
             }

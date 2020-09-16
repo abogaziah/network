@@ -120,7 +120,13 @@ def submit_post_like(request):
 @csrf_exempt
 def get_profile(request, username):
     if request.method == "GET":
-        author = User.objects.get(username=username)
-        posts = Post.objects.filter(author=author)
+        response = []
+        user = User.objects.get(username=username)
+        posts = Post.objects.filter(author=user)
         posts = posts.order_by("-created_at").all()
-        return JsonResponse([post.serialize() for post in posts], safe=False)
+        for post in posts:
+            liked = PostLike.objects.filter(liker=user, post=post).exists()
+            data_dict = post.serialize()
+            data_dict["liked"] = liked
+            response.append(data_dict)
+        return JsonResponse(response, safe=False)
