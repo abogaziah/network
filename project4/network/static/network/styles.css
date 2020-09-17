@@ -33,3 +33,17 @@
 }
 .UnlikeButton:hover{background-color:lightgray}
 .UnlikeButton:focus {outline:0;}
+
+.navbar{
+    display: flex;
+    justify-content: space-around;
+}
+
+.CommentButton{
+    background-color: transparent;
+    color: lightgray;
+    border: none;
+    border-radius: 15px;
+}
+.CommentButton:hover{background-color:darkseagreen}
+.CommentButton:focus {outline:0;}

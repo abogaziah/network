@@ -164,7 +164,12 @@ class Post extends React.Component{
                 <hr/>
                 <h5>{this.props.content}</h5>
                 <hr/>
-                <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
+                <div className="navbar">
+                        <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
+                        <CommentButton id={this.props.id}/>
+                </div>
+
+
             </div>
 
         )
@@ -230,7 +235,68 @@ class LikeButton extends React.Component {
     }
 }
 
+class CommentButton extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {isClicked:false};
+        this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick(){
+        this.setState({isClicked:!this.state.isClicked})
+    }
+    render(){
+        const isClicked = this.state.isClicked
+        return(
+            <div className={"navbar"}>
+                    <button className={"CommentButton"} onClick={this.handleClick}>
+                        <i className="fa fa-comment"></i>
+                    </button>
+                    {isClicked? <CommentForm id={this.props.id}/>: null }
+            </div>
 
+        )
+    }
+
+}
+
+class CommentForm extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    handleSubmit(){
+        if (this.state.value.length> 0){
+            event.preventDefault()
+            fetch('/submitComment', {
+                method: 'POST',
+                body:JSON.stringify({
+                    content: `${this.state.value}`,
+                    postId: `${this.props.id}`
+                })
+            }).then(response => response.json())
+            .then(response => { console.log(response) });
+            this.setState({value : ''})
+        }
+    }
+
+    render() {
+        return (
+            <form className="postForm" onSubmit={this.handleSubmit}>
+                <input className="form-control" type="text" placeholder="Add a comment" value={this.state.value} onChange={this.handleChange} />
+                <input className="btn btn-primary" type="submit" value="Post" />
+            </form>
+        );
+    }
+
+}
 
 
 ReactDOM.render(

@@ -117,6 +117,7 @@ def submit_post_like(request):
             except IntegrityError:
                 return JsonResponse({"message": "invalid"}, status=201)
 
+
 @csrf_exempt
 def get_profile(request, username):
     if request.method == "GET":
@@ -130,3 +131,21 @@ def get_profile(request, username):
             data_dict["liked"] = liked
             response.append(data_dict)
         return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+def submit_comment(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user = get_user(request)
+        content = data["content"]
+        post_id = data["postId"]
+        post = Post.objects.get(id=post_id)
+        try:
+            comment = Comment(author=user, content=content, post=post)
+            comment.save()
+            return JsonResponse({"message": "Posted"}, status=201)
+        except IntegrityError:
+            return render(request, "network/index.html", {
+                "message": "invalid"
+            })
