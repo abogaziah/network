@@ -153,9 +153,16 @@ class ProfilePage extends React.Component{
 class Post extends React.Component{
     constructor() {
         super();
+        this.state = {showCommentForm:false}
+        this.handler = this.handler.bind(this)
     }
-
+    handler() {
+        this.setState({
+            showCommentForm: !this.state.showCommentForm
+        })
+    }
     render(){
+        const showCommentForm = this.state.showCommentForm
         return(
             <div className='post'>
                 {this.props.username}
@@ -166,10 +173,9 @@ class Post extends React.Component{
                 <hr/>
                 <div className="navbar">
                         <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
-                        <CommentButton id={this.props.id}/>
+                        <CommentButton handler={this.handler} id={this.props.id}/>
                 </div>
-
-
+                {showCommentForm? <CommentForm id={this.props.id}/>: null }
             </div>
 
         )
@@ -245,13 +251,11 @@ class CommentButton extends React.Component{
         this.setState({isClicked:!this.state.isClicked})
     }
     render(){
-        const isClicked = this.state.isClicked
         return(
             <div className={"navbar"}>
-                    <button className={"CommentButton"} onClick={this.handleClick}>
+                    <button className={"CommentButton"} onClick={this.props.handler}>
                         <i className="fa fa-comment"></i>
                     </button>
-                    {isClicked? <CommentForm id={this.props.id}/>: null }
             </div>
 
         )
@@ -289,7 +293,7 @@ class CommentForm extends React.Component{
 
     render() {
         return (
-            <form className="postForm" onSubmit={this.handleSubmit}>
+            <form className="commentForm" onSubmit={this.handleSubmit}>
                 <input className="form-control" type="text" placeholder="Add a comment" value={this.state.value} onChange={this.handleChange} />
                 <input className="btn btn-primary" type="submit" value="Post" />
             </form>
