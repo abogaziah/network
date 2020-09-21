@@ -52,3 +52,10 @@
     display: flex;
     justify-content: flex-start;
 }
+.comment{
+    border-style: solid;
+    border-width: thin;
+    border-color: lightgray;
+    margin: 20px 0px 20px 0px;
+    padding: 10px;
+}

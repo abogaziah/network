@@ -33,6 +33,16 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        likes = CommentLike.objects.filter(comment=self).count()
+        return {
+            "author": self.author.username,
+            "content": self.content,
+            "time_stamp": self.created_at,
+            "id": self.id,
+            "likes": likes,
+        }
+
 
 class PostLike(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')

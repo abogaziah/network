@@ -175,7 +175,12 @@ class Post extends React.Component{
                         <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
                         <CommentButton handler={this.handler} id={this.props.id}/>
                 </div>
-                {showCommentForm? <CommentForm id={this.props.id}/>: null }
+                {showCommentForm? (
+                    <div>
+                        <CommentForm id={this.props.id}/>
+                        <CommentFeed id={this.props.id}/>
+                    </div>
+                ): null }
             </div>
 
         )
@@ -302,7 +307,60 @@ class CommentForm extends React.Component{
 
 }
 
+class CommentFeed extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {comments:[]};
+        this.fetchComments = this.fetchComments.bind(this);
+        this.fetchComments()
+    }
+    fetchComments(){
+        event.preventDefault()
+        fetch('/getComments?' + new URLSearchParams({
+            id:`${this.props.id}`
+        })).then(response => response.json()).then(comments => {
+            this.setState({comments:comments});
+        });
+    }
+    render(){
+        const comments = this.state.comments;
+        const FeedComments = comments.map((comment) => {
+                let props = {
+                    username:comment.author,
+                    timestamp: comment.time_stamp,
+                    content:comment.content,
+                    likes:comment.likes,
+                    id:comment.id,
+                    liked: comment.liked}
+                return <Comment key={comment.id} {...props}/>
+            }
+        );
+        return(
+            <div>
+                {FeedComments}
+            </div>
+        )
+    }
+}
 
+class Comment extends React.Component{
+    constructor() {
+        super();
+    }
+    render(){
+        return(
+            <div className='comment'>
+                {this.props.username}
+                <br/>
+                {this.props.timestamp}
+                <hr/>
+                <p>{this.props.content}</p>
+            </div>
+
+        )
+    }
+
+}
 ReactDOM.render(
     <App/>,
     document.getElementById('app')

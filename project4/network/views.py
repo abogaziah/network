@@ -79,6 +79,22 @@ def get_posts(request):
         return JsonResponse(response, safe=False)
 
 
+def get_comments(request):
+    if request.method == "GET":
+        response = []
+        user = get_user(request)
+        post_id = request.GET.get('id', '')
+        post = Post.objects.get(id=post_id)
+        comments = Comment.objects.filter(post=post)
+        comments = comments.order_by("-created_at").all()
+        for comment in comments:
+            liked = CommentLike.objects.filter(liker=user, comment=comment).exists()
+            data_dict = comment.serialize()
+            data_dict["liked"] = liked
+            response.append(data_dict)
+        return JsonResponse(response, safe=False)
+
+
 @csrf_exempt
 def submit_post(request):
     if request.method == "POST":
