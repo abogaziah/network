@@ -1,7 +1,7 @@
 class App extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {page:""};
+        this.state = {page:"feed"};
         this.determinePage()
     }
 
@@ -47,28 +47,37 @@ class PostForm extends React.Component {
         this.setState({value: event.target.value});
     }
 
+    fileChangedHandler = event => {
+        this.setState({ selectedFile: event.target.files[0] })
+    }
+
     handleSubmit() {
         this.create_post()
     }
 
     create_post(){
+        event.preventDefault()
         if (this.state.value.length> 0){
+            let formData = new FormData();
+            formData.append("content", this.state.value);
+            formData.append('media', this.state.selectedFile);
+            console.log(...formData)
             fetch('/submitPost', {
                 method: 'POST',
-                body:JSON.stringify({
-                    content: `${this.state.value}`
-                })
-            })//.then(response => response.json())
-                //.then(response => { console.log(response) });
+                body: formData
+            }).then(response => response.json())
+                .then(response => { console.log(response) });
             this.setState({value : ''})
         }
     }
 
     render() {
         return (
-            <form className="postForm" onSubmit={this.handleSubmit}>
+            <form className="postForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <input className="form-control" type="text" placeholder="What's up?" value={this.state.value} onChange={this.handleChange} />
-                <input className="btn btn-primary" type="submit" value="Post" />
+                <input className="btn btn-primary" type="submit" value="Post"/>
+                <button className="btn btn-primary" onClick={()=>this.fileInput.click()}><i className="fas fa-image"></i></button>
+                <input style={{display:'none'}} type="file" onChange={this.fileChangedHandler} ref={fileInput => this.fileInput = fileInput}/>
             </form>
         );
     }

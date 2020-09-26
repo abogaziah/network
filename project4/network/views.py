@@ -98,7 +98,8 @@ def get_comments(request):
 @csrf_exempt
 def submit_post(request):
     if request.method == "POST":
-        data = json.loads(request.body)
+        media = request.FILES
+        data = request.POST
         user = get_user(request)
         content = data["content"]
         try:
