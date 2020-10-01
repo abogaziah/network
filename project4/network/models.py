@@ -10,16 +10,20 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='images', null=True)
 
     def serialize(self):
         likes = PostLike.objects.filter(post=self).count()
-        return {
+        data = {
             "author": self.author.username,
             "content": self.content,
             "time_stamp": self.created_at,
             "id": self.id,
             "likes": likes,
         }
+        if self.image:
+            data["image"] = self.image.url
+        return data
 
 
 class Relationship(models.Model):

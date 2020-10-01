@@ -102,8 +102,9 @@ def submit_post(request):
         data = request.POST
         user = get_user(request)
         content = data["content"]
+        image = media["media"]
         try:
-            post = Post(author=user, content=content)
+            post = Post(author=user, content=content, image=image)
             post.save()
             return JsonResponse({"message": "Posted"}, status=201)
         except IntegrityError:

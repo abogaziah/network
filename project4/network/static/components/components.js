@@ -41,6 +41,7 @@ class PostForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.fileChangedHandler = this.fileChangedHandler.bind(this);
     }
 
     handleChange(event) {
@@ -56,12 +57,10 @@ class PostForm extends React.Component {
     }
 
     create_post(){
-        event.preventDefault()
         if (this.state.value.length> 0){
             let formData = new FormData();
             formData.append("content", this.state.value);
             formData.append('media', this.state.selectedFile);
-            console.log(...formData)
             fetch('/submitPost', {
                 method: 'POST',
                 body: formData
@@ -74,10 +73,15 @@ class PostForm extends React.Component {
     render() {
         return (
             <form className="postForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
-                <input className="form-control" type="text" placeholder="What's up?" value={this.state.value} onChange={this.handleChange} />
+                <input className="form-control" type="text" placeholder="What's up, dog?" value={this.state.value} onChange={this.handleChange} />
                 <input className="btn btn-primary" type="submit" value="Post"/>
-                <button className="btn btn-primary" onClick={()=>this.fileInput.click()}><i className="fas fa-image"></i></button>
-                <input style={{display:'none'}} type="file" onChange={this.fileChangedHandler} ref={fileInput => this.fileInput = fileInput}/>
+                <label htmlFor={"file"} className={"btn btn-primary imageButton"}>
+                    <i className="fa fa-image"></i>
+                </label>
+                <span>
+                    {this.state.selectedFile?this.state.selectedFile.name:null}
+                </span>
+                <input style={{display:'none'}} type="file" id={"file"} onChange={this.fileChangedHandler}/>
             </form>
         );
     }
@@ -95,7 +99,8 @@ class Feed extends React.Component{
         event.preventDefault()
         fetch('/getPosts',{
             method:'GET'
-        }).then(response => response.json()).then(posts => {
+        }).then(response => response.json())
+            .then(posts => {
             this.setState({posts:posts});
         });
     }
@@ -108,7 +113,8 @@ class Feed extends React.Component{
                 content:post.content,
                 likes:post.likes,
                 id:post.id,
-                liked: post.liked}
+                liked: post.liked,
+                image: post.image}
             return <Post key={post.id} {...props}/>
         }
         );
@@ -178,7 +184,10 @@ class Post extends React.Component{
                 <br/>
                 {this.props.timestamp}
                 <hr/>
-                <h5>{this.props.content}</h5>
+                <p>
+                    <span>{this.props.content}</span>
+                </p>
+                <img src={this.props.image}/>
                 <hr/>
                 <div className="navbar">
                         <LikeButton id={this.props.id} likes={this.props.likes} liked = {this.props.liked}/>
@@ -248,7 +257,7 @@ class LikeButton extends React.Component {
             <div >
                 <button className={this.state.class} onClick={this.handleClick}>
                     <i className="fa fa-heart"></i>
-                    </button>
+                </button>
                 {this.state.likes}
             </div>
         );
