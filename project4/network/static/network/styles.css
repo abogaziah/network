@@ -7,12 +7,14 @@
     border-style: solid;
     border-width: thin;
     border-color: lightgray;
+    border-radius: 15px;
     box-shadow: 3px 3px 5px 6px #ccc;
 }
 .post{
     border-style: solid;
     border-width: thin;
     border-color: lightgray;
+    border-radius: 15px;
     margin: 20px 0px 20px 0px;
     padding: 10px;
     box-shadow: 3px 3px 5px 6px #ccc;
@@ -65,10 +67,19 @@
     background-color: transparent;
     color: #007bff;
     margin: 5px;
+    border-radius: 15px;
 }
 .imageButton:hover{background-color:#007bff}
 
 img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+}
+.commentButton{
+    background-color: transparent;
+    color: #007bff;
+    border: none;
+}
+.postButton{
+    margin: 5px;
+    border-radius: 15px;
 }

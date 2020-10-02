@@ -74,7 +74,7 @@ class PostForm extends React.Component {
         return (
             <form className="postForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <input className="form-control" type="text" placeholder="What's up, dog?" value={this.state.value} onChange={this.handleChange} />
-                <input className="btn btn-primary" type="submit" value="Post"/>
+                <input className="btn btn-primary postButton" type="submit" value="Post"/>
                 <label htmlFor={"file"} className={"btn btn-primary imageButton"}>
                     <i className="fa fa-image"></i>
                 </label>
@@ -318,7 +318,10 @@ class CommentForm extends React.Component{
         return (
             <form className="commentForm" onSubmit={this.handleSubmit}>
                 <input className="form-control" type="text" placeholder="Add a comment" value={this.state.value} onChange={this.handleChange} />
-                <input className="btn btn-primary" type="submit" value="Post" />
+                <label htmlFor={"subComment"} className={"btn btn-primary commentButton"}>
+                    <i className="fa fa-paper-plane"></i>
+                </label>
+                <input style={{display:'none'}} className="btn btn-primary" id={"subComment"} type="submit" value="Post" />
             </form>
         );
     }
@@ -379,6 +382,7 @@ class Comment extends React.Component{
     }
 
 }
+
 ReactDOM.render(
     <App/>,
     document.getElementById('app')
