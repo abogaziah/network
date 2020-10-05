@@ -58,6 +58,7 @@ class PostForm extends React.Component {
 
     create_post(){
         if (this.state.value.length> 0){
+            event.preventDefault()
             let formData = new FormData();
             formData.append("content", this.state.value);
             formData.append('media', this.state.selectedFile);

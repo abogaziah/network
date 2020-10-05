@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .utils.imageClassifier import is_doggo
 
 
 def index(request):
@@ -103,14 +104,17 @@ def submit_post(request):
         user = get_user(request)
         content = data["content"]
         image = media["media"]
-        try:
-            post = Post(author=user, content=content, image=image)
-            post.save()
-            return JsonResponse({"message": "Posted"}, status=201)
-        except IntegrityError:
-            return render(request, "network/index.html", {
-                "message": "invalid"
-            })
+        if is_doggo(image.file):
+            try:
+                post = Post(author=user, content=content, image=image)
+                post.save()
+                return JsonResponse({"message": "Posted"}, status=201)
+            except IntegrityError:
+                return render(request, "network/index.html", {
+                    "message": "invalid"
+                })
+        else:
+            return JsonResponse({"message": "not doggo"}, status=201)
 
 
 @csrf_exempt
