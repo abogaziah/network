@@ -62,12 +62,17 @@ class PostForm extends React.Component {
             let formData = new FormData();
             formData.append("content", this.state.value);
             formData.append('media', this.state.selectedFile);
+            this.setState({message:"Looking for doggos..."})
             fetch('/submitPost', {
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
-                .then(response => { console.log(response) });
-            this.setState({value : ''})
+                .then(response => {
+                    console.log(response)
+                    this.setState({ message:response.message})
+                    setTimeout(()=>{this.setState({message:''})}, 1500)
+                });
+            this.setState({selectedFile:null, value : ''})
         }
     }
 
@@ -81,6 +86,7 @@ class PostForm extends React.Component {
                 </label>
                 <span>
                     {this.state.selectedFile?this.state.selectedFile.name:null}
+                    {this.state.message}
                 </span>
                 <input style={{display:'none'}} type="file" id={"file"} onChange={this.fileChangedHandler}/>
             </form>

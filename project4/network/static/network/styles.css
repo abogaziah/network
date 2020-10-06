@@ -26,12 +26,12 @@
     border-radius: 15px;
 
 }
-.LikeButton:hover{background-color:darkred}
+.LikeButton:hover{background-color:#FF5364}
 .LikeButton:focus {outline:0;}
 
 .UnlikeButton {
     background-color: transparent;
-    color: darkred;
+    color: #FF5364;
     border: none;
     border-radius: 15px;
 }
@@ -64,22 +64,41 @@
     padding: 10px;
 }
 .imageButton{
-    background-color: transparent;
-    color: #007bff;
+    background-color :transparent;
     margin: 5px;
     border-radius: 15px;
 }
-.imageButton:hover{background-color:#007bff}
 
 img {
     width: 100%;
 }
-.commentButton{
-    background-color: transparent;
-    color: #007bff;
-    border: none;
-}
 .postButton{
     margin: 5px;
     border-radius: 15px;
+}
+.logo{
+    width: 75px;
+}
+.btn-primary{
+    background-color :#FF5364;
+    border: none;
+}
+.btn-primary:hover{
+    background-color :#DF4D60;
+    border: none;
+}
+.imageButton{
+    color: #FF5364;
+    border: #FF5364;
+    background-color :transparent;
+    margin: 5px;
+    border-radius: 15px;
+}
+.imageButton:hover{
+    background-color :transparent;
+}
+.commentButton{
+    background-color: transparent;
+    color: #FF5364;
+    border: none;
 }
