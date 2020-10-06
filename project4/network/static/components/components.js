@@ -315,8 +315,8 @@ class CommentForm extends React.Component{
     }
 
     handleSubmit(){
+        event.preventDefault()
         if (this.state.value.length> 0){
-            event.preventDefault()
             fetch('/submitComment', {
                 method: 'POST',
                 body:JSON.stringify({
@@ -325,20 +325,26 @@ class CommentForm extends React.Component{
                 })
             }).then(response => response.json())
             .then(response => { console.log(response) });
-            this.setState({value : ''})
-            location.reload();
+            this.setState({comment:this.state.value ,value : '', commented: true})
         }
     }
 
     render() {
         return (
-            <form className="commentForm" onSubmit={this.handleSubmit}>
-                <input className="form-control" type="text" placeholder="Add a comment" value={this.state.value} onChange={this.handleChange} />
-                <label htmlFor={"subComment"} className={"btn btn-primary commentButton"}>
-                    <i className="fa fa-paper-plane"></i>
-                </label>
-                <input style={{display:'none'}} className="btn btn-primary" id={"subComment"} type="submit" value="Post" />
-            </form>
+            <div>
+                <form className="commentForm" onSubmit={this.handleSubmit}>
+                    <input className="form-control" type="text" placeholder="Add a comment" value={this.state.value} onChange={this.handleChange} />
+                    <label htmlFor={"subComment"} className={"btn btn-primary commentButton"}>
+                        <i className="fa fa-paper-plane"></i>
+                    </label>
+                    <input style={{display:'none'}} className="btn btn-primary" id={"subComment"} type="submit" value="Post" />
+                </form>
+                {(this.state.commented)
+                    ?<Comment content={this.state.comment}/>
+                    :null
+                }
+            </div>
+
         );
     }
 
