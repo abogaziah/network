@@ -79,7 +79,7 @@ class PostForm extends React.Component {
     render() {
         return (
             <form className="postForm" onSubmit={this.handleSubmit} encType="multipart/form-data">
-                <input className="form-control" type="text" placeholder="What's up, dog?" value={this.state.value} onChange={this.handleChange} />
+                <input className="form-control textbox" type="text" placeholder="What's up, dog?" value={this.state.value} onChange={this.handleChange}/>
                 <input className="btn btn-primary postButton" type="submit" value="Post"/>
                 <label htmlFor={"file"} className={"btn btn-primary imageButton"}>
                     <i className="fa fa-image"></i>
@@ -88,7 +88,7 @@ class PostForm extends React.Component {
                     {this.state.selectedFile?this.state.selectedFile.name:null}
                     {this.state.message}
                 </span>
-                <input style={{display:'none'}} type="file" id={"file"} onChange={this.fileChangedHandler}/>
+                <input style={{display:'none'}} type="file" id={"file"} onChange={this.fileChangedHandler} accept="image/png, image/jpeg"/>
             </form>
         );
     }
