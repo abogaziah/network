@@ -11,6 +11,11 @@
     background-color :#DF4D60;
     border: none;
 }
+.btn-primary:focus{
+    background-color :#DF4D60;
+    border: none;
+}
+
 .postForm{
     border-style: solid;
     border-width: thin;

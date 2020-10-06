@@ -57,8 +57,8 @@ class PostForm extends React.Component {
     }
 
     create_post(){
-        if (this.state.value.length> 0){
-            event.preventDefault()
+        event.preventDefault()
+        if (this.state.selectedFile){
             let formData = new FormData();
             formData.append("content", this.state.value);
             formData.append('media', this.state.selectedFile);
@@ -71,8 +71,16 @@ class PostForm extends React.Component {
                     console.log(response)
                     this.setState({ message:response.message})
                     setTimeout(()=>{this.setState({message:''})}, 1500)
+                    if (this.state.message === "Posted"){
+                        setTimeout(()=>{location.reload();}, 2000)
+                    }
                 });
             this.setState({selectedFile:null, value : ''})
+        }
+        else {
+            this.setState({message : 'You must select an image'})
+            setTimeout(()=>{this.setState({message : ''})}, 1000)
+
         }
     }
 
@@ -318,6 +326,7 @@ class CommentForm extends React.Component{
             }).then(response => response.json())
             .then(response => { console.log(response) });
             this.setState({value : ''})
+            location.reload();
         }
     }
 
