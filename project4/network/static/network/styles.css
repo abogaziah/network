@@ -15,6 +15,10 @@
     background-color :#DF4D60;
     border: none;
 }
+.btn-primary:active{
+    background-color :#DF4D60;
+    border: none;
+}
 
 .postForm{
     border-style: solid;
@@ -98,9 +102,6 @@ img {
     background-color :transparent;
     margin: 5px;
     border-radius: 15px;
-}
-.imageButton:hover{
-    background-color :#FF5364;;
 }
 .commentButton{
     background-color: transparent;
