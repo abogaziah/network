@@ -7,7 +7,6 @@ from django.urls import reverse
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .utils.imageClassifier import is_doggo
 
 
 def index(request):
@@ -104,7 +103,7 @@ def submit_post(request):
         user = get_user(request)
         content = data["content"]
         image = media["media"]
-        if is_doggo(image.file):
+        if True:
             try:
                 post = Post(author=user, content=content, image=image)
                 post.save()
